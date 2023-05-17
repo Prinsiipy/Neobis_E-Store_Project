@@ -1,24 +1,41 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from .models import UserProfile
+
+from .models import User
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['phone_number', 'address']
-
-
-class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer()
+class RegisterUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'profile']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = (
+            "username",
+            "password",
+            "email",
+            "first_name",
+            "last_name",
+            "address",
+            "phone",
+            "role",
+        )
+        extra_kwargs = {
+            "email": {"required": True},
+            "username": {"required": True},
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+            "password": {"write_only": True},
+        }
 
     def create(self, validated_data):
-        profile_data = validated_data.pop('profile')
-        user = User.objects.create_user(**validated_data)
-        UserProfile.objects.create(user=user, **profile_data)
+        user = User.objects.create(
+            username=validated_data["username"],
+            email=validated_data["email"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            address=validated_data["address"],
+            phone=validated_data["phone"],
+        )
+
+        user.set_password(validated_data["password"])
+        user.save()
+
         return user

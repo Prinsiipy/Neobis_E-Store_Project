@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('price', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('description', models.TextField()),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.category')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='product.category')),
             ],
         ),
         migrations.CreateModel(
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date_ordered', models.DateTimeField(auto_now_add=True)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.product')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='product.product')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
